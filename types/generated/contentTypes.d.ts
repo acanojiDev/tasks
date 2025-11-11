@@ -677,6 +677,81 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiCategoriaCategoria extends Schema.CollectionType {
+  collectionName: 'categorias';
+  info: {
+    singularName: 'categoria';
+    pluralName: 'categorias';
+    displayName: 'Categoria';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    nombre: Attribute.String;
+    descripcion: Attribute.Text;
+    productos: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToMany',
+      'api::producto.producto'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::categoria.categoria',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductoProducto extends Schema.CollectionType {
+  collectionName: 'productos';
+  info: {
+    singularName: 'producto';
+    pluralName: 'productos';
+    displayName: 'Producto';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    nombre: Attribute.String;
+    descripcion: Attribute.String;
+    precio: Attribute.Decimal;
+    imagen: Attribute.Media;
+    categoria: Attribute.Relation<
+      'api::producto.producto',
+      'manyToOne',
+      'api::categoria.categoria'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::producto.producto',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::producto.producto',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -693,6 +768,8 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::categoria.categoria': ApiCategoriaCategoria;
+      'api::producto.producto': ApiProductoProducto;
     }
   }
 }
